@@ -419,16 +419,10 @@ export function postProcessing() {
           validationCategory: it.validationCategory,
           providerNamespace: it.providerNamespace,
           resourceType: it.resourceType,
-          oldRef: targetHref(
-            utils.getGithubStyleFilePath(
-              utils.getRelativeSwaggerPathToRepo(it.jsonref.split(' ')[0] || "")
-            )
-          ) + " " + (it.jsonref.split(' ').length > 1 ? it.jsonref.split(' ')[1] : ''),
-          newRef: blobHref(
-            utils.getGithubStyleFilePath(
-              utils.getRelativeSwaggerPathToRepo(it.jsonref.split(' ')[0] || "")
-            )
-          ) + " " + (it.jsonref.split(' ').length > 1 ? it.jsonref.split(' ')[1] : '')
+          jsonref: it.jsonref,
+          filePath: it.filePath,
+          lineNumber: it.lineNumber,
+          sources: it.sources
         },
         paths: [
           {

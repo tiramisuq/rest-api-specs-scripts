@@ -91,15 +91,21 @@ export async function getLinterResult(
     //console.log(resultString);
     try {
       jsonResult = JSON.parse(resultString);
-      //console.log('>>>>>> Parsed Result...');
+      // console.log(`>>>>>> Parsed Result... ${jsonResult}`);
       //console.dir(resultObject, {depth: null, colors: true});
       return jsonResult;
     } catch (e) {
+      console.log(JSON.stringify({
+          message: `------- An error occurred while executing JSON.parse() on the linter output for ${swaggerPath}:`,
+          error: `${e}`
+        })
+      );
       console.error(
         `An error occurred while executing JSON.parse() on the linter output for ${swaggerPath}:`
       );
       console.dir(resultString);
       console.dir(e, { depth: null, colors: true });
+      throw new Error(`An error occurred while executing JSON.parse() on the linter output for ${swaggerPath}:`);
       process.exit(1);
     }
   }
@@ -234,11 +240,11 @@ export async function lintDiff(utils: TypeUtils, devOps: TypeDevOps) {
 
   if (errors.length > 0) {
     process.exitCode = 1;
-    console.log(`LintDiff error log: ${errors}`);
+    console.log(`LintDiff error log ----`);
     const errorResult: format.MessageLine = errors.map((it) => ({
       type: "Raw",
       level: "Error",
-      message: it.error.stack || "",
+      message: it.error.message || "",
       time: new Date(),
       extra: {
         role: "Lint Diff",
@@ -247,8 +253,9 @@ export async function lintDiff(utils: TypeUtils, devOps: TypeDevOps) {
       },
     }));
 
-    console.log("--- Errors of Lint Diff ----\n");
+    console.log("--- Errors of Lint Diff 001 ----\n");
     console.log(JSON.stringify(errorResult));
     fs.appendFileSync("pipe.log", JSON.stringify(errorResult) + "\n");
+    return process.exit(1);
   }
 }
