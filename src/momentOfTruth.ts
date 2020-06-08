@@ -71,7 +71,7 @@ export async function getLinterResult(
   if (err && stderr.indexOf("Process() cancelled due to exception") !== -1) {
     console.error(`AutoRest exited with code ${err.code}`);
     console.error(stderr);
-    throw new Error(`AutoRest exited with code ${err.code}`);
+    throw new Error("AutoRest failed");
   }
 
   let resultString = stdout + stderr;
@@ -91,15 +91,10 @@ export async function getLinterResult(
     //console.log(resultString);
     try {
       jsonResult = JSON.parse(resultString);
-      // console.log(`>>>>>> Parsed Result... ${jsonResult}`);
+      //console.log('>>>>>> Parsed Result...');
       //console.dir(resultObject, {depth: null, colors: true});
       return jsonResult;
     } catch (e) {
-      console.log(JSON.stringify({
-          message: `------- An error occurred while executing JSON.parse() on the linter output for ${swaggerPath}:`,
-          error: `${e}`
-        })
-      );
       console.error(
         `An error occurred while executing JSON.parse() on the linter output for ${swaggerPath}:`
       );
@@ -253,7 +248,7 @@ export async function lintDiff(utils: TypeUtils, devOps: TypeDevOps) {
       },
     }));
 
-    console.log("--- Errors of Lint Diff 001 ----\n");
+    console.log("--- Errors of Lint Diff (formated) ----\n");
     console.log(JSON.stringify(errorResult));
     fs.appendFileSync("pipe.log", JSON.stringify(errorResult) + "\n");
     return process.exit(1);

@@ -1,6 +1,6 @@
 {
   "name": "@xiaoxu_dev/rest-api-specs-scripts",
-  "version": "0.10.9",
+  "version": "0.10.10",
   "description": "Scripts for the Azure RestAPI specification repository 'azure-rest-api-specs'.",
   "types": "dist/index.d.ts",
   "main": "dist/index.js",
